@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import SignupForm from '@/app/signup/signup-form';
+import SignupForm from '@/app/sign-up/sign-up-form';
 import { checkAuthExists } from '@/lib/auth-guards';
 
 export default async function SignupPage() {

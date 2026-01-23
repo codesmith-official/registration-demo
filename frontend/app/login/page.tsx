@@ -10,7 +10,7 @@ export default async function LoginPage() {
       <h1 className='text-2xl font-semibold text-center mb-6'>Login</h1>
       <LoginForm />
       <p className='text-sm text-center mt-4'>
-        <Link className='text-blue-600 hover:underline' href={'/signup'}>
+        <Link className='text-blue-600 hover:underline' href={'/sign-up'}>
           New member? Click here to Signup.
         </Link>
       </p>

@@ -1,0 +1,36 @@
+{
+  "COMMON": {
+    "SUCCESS": "Success",
+    "NOT_FOUND": "Record not found",
+    "SERVER_ERROR": "Something went wrong"
+  },
+  "SUBJECT": {
+    "CREATED": "Subject created successfully",
+    "UPDATED": "Subject updated successfully",
+    "DELETED": "Subject deleted successfully"
+  },
+  "STANDARD": {
+    "CREATED": "Standard created successfully",
+    "UPDATED": "Standard updated successfully",
+    "DELETED": "Standard deleted successfully"
+  },
+  "STUDENT": {
+    "CREATED": "Student created successfully",
+    "UPDATED": "Student updated successfully",
+    "DELETED": "Student deleted successfully",
+    "FILE_GENERATED": "Export file has been generated",
+    "EXCEL_FILE_REQUIRED": "Excel file is required",
+    "IMPORT_COMPLETED": "Import process has been completed"
+  },
+  "MARKSHEET": {
+    "SAVED": "Marksheet saved successfully"
+  },
+  "AUTH": {
+    "LOGIN_SUCCESS": "Connexion réussie.",
+    "REGISTER_SUCCESS": "Utilisateur enregistré avec succès.",
+    "INVALID_CREDENTIALS": "Adresse e-mail ou mot de passe invalide.",
+    "USER_ALREADY_EXISTS": "Un utilisateur avec cette adresse e-mail existe déjà.",
+    "UNAUTHORIZED": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "LOGOUT_SUCCESS": "Déconnexion réussie."
+  }
+}

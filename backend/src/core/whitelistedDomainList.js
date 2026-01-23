@@ -1,0 +1,6 @@
+const whitelistedDomainList = [
+  'http://localhost:3000',
+  'https://www.example.com',
+];
+
+module.exports = whitelistedDomainList;

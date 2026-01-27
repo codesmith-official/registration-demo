@@ -30,7 +30,16 @@
     "REGISTER_SUCCESS": "User registered successfully.",
     "INVALID_CREDENTIALS": "Invalid email or password.",
     "USER_ALREADY_EXISTS": "A user with this email already exists.",
-    "UNAUTHORIZED": "You are not authorized to perform this action.",
-    "LOGOUT_SUCCESS": "Logout successful."
+    "UNAUTHORIZED": "You are not authorized to perform this action."
+  },
+  "USERTYPE": {
+    "CREATED": "User-type created successfully",
+    "UPDATED": "User-type updated successfully",
+    "DELETED": "User-type deleted successfully"
+  },
+  "PERMISSION": {
+    "CREATED": "Permission created successfully",
+    "UPDATED": "Permission updated successfully",
+    "DELETED": "Permission deleted successfully"
   }
 }

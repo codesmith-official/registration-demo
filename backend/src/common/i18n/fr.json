@@ -30,7 +30,16 @@
     "REGISTER_SUCCESS": "Utilisateur enregistré avec succès.",
     "INVALID_CREDENTIALS": "Adresse e-mail ou mot de passe invalide.",
     "USER_ALREADY_EXISTS": "Un utilisateur avec cette adresse e-mail existe déjà.",
-    "UNAUTHORIZED": "Vous n'êtes pas autorisé à effectuer cette action.",
-    "LOGOUT_SUCCESS": "Déconnexion réussie."
+    "UNAUTHORIZED": "Vous n'êtes pas autorisé à effectuer cette action."
+  },
+  "USERTYPE": {
+    "CREATED": "Type d'utilisateur créé avec succès",
+    "UPDATED": "Type d'utilisateur mis à jour avec succès",
+    "DELETED": "Type d'utilisateur supprimé avec succès"
+  },
+  "PERMISSION": {
+    "CREATED": "Autorisation créée avec succès",
+    "UPDATED": "Autorisation mise à jour avec succès",
+    "DELETED": "Autorisation supprimée avec succès"
   }
 }

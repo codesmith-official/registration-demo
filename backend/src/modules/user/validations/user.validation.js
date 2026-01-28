@@ -31,4 +31,10 @@ module.exports = {
       id: Joi.number().required(),
     }),
   },
+  assignStandardsToUser: {
+    body: Joi.object({
+      userId: Joi.number().integer().required(),
+      standardIds: Joi.array().items(Joi.number().integer()).min(1).required(),
+    }),
+  },
 };

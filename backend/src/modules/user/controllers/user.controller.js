@@ -142,6 +142,28 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const assignStandardsToUser = async (req, res, next) => {
+  try {
+    const response = await userService.assignStandardsToUser(
+      req.body,
+      req.user,
+    );
+
+    if (!response.process) {
+      return sendError(res, req.lang, response.message, response.statusCode);
+    }
+
+    return sendResponse(
+      res,
+      req.lang,
+      'USER.STANDARDS_ASSIGNED',
+      response.data,
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   login,
   getMe,
@@ -149,4 +171,5 @@ module.exports = {
   createUser,
   updateUser,
   getAllUsers,
+  assignStandardsToUser,
 };

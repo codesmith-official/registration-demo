@@ -34,7 +34,10 @@
   },
   "USER": {
     "CREATED": "User created successfully",
-    "UPDATED": "User updated successfully"
+    "UPDATED": "User updated successfully",
+    "NO_NEW_STANDARD_ASSIGNED": "No new Standards assigned",
+    "STANDARDS_ASSIGNED_TO_TEACHERS_ONLY": "Standards can only be assigned to teachers",
+    "STANDARDS_ASSIGNED": "Standards assigned successfully"
   },
   "USERTYPE": {
     "CREATED": "User-type created successfully",

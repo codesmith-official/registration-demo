@@ -14,7 +14,7 @@ const createOrUpdate = async (payload) => {
 
 const getAll = async () => {
   return await Subject.findAll({
-    order: [['id', 'DESC']],
+    order: [['id', 'ASC']],
   });
 };
 

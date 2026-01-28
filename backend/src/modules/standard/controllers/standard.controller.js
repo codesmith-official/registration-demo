@@ -27,7 +27,7 @@ const createOrUpdate = async (req, res, next) => {
 
 const list = async (req, res, next) => {
   try {
-    const data = await standardService.getAll();
+    const data = await standardService.getAll(req.user);
     return sendResponse(res, req.lang, 'COMMON.SUCCESS', data);
   } catch (err) {
     next(err);
@@ -66,7 +66,7 @@ const remove = async (req, res, next) => {
       );
     }
 
-    return sendResponse(res, req.lang, 'SUBJECT.DELETED');
+    return sendResponse(res, req.lang, 'STANDARD.DELETED');
   } catch (err) {
     next(err);
   }

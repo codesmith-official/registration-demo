@@ -21,6 +21,14 @@ router
 router.post('/login', validator(validation.login), controller.login);
 router.get('/me', authMiddleware, controller.getMe, controller.getUser);
 
+router.post(
+  '/assign-standards',
+  authMiddleware,
+  checkPermission('standard.assign'),
+  validator(validation.assignStandardsToUser),
+  controller.assignStandardsToUser,
+);
+
 router
   .route('/:id')
   .all(authMiddleware)

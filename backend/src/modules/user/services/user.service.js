@@ -3,7 +3,9 @@ const sequelize = require('../../../config/sequelize');
 const User = require('../models/user.model');
 const { Permission, UserType } = require('../../../models');
 const UserPermission = require('../models/userPermission.model');
+const UserStandard = require('../models/userStandard.model');
 const { Op } = require('sequelize');
+const { StatusCodes } = require('http-status-codes');
 
 const SALT_ROUNDS = 10;
 
@@ -193,6 +195,76 @@ const updateUser = async (payload, loggedInUser) => {
   }
 };
 
+const assignStandardsToUser = async (payload, loggedInUser) => {
+  const { userId, standardIds } = payload;
+
+  const user = await User.findOne({
+    where: { id: userId },
+    include: [
+      {
+        model: UserType,
+        as: 'userType',
+        attributes: ['id'],
+      },
+    ],
+  });
+
+  if (!user) {
+    return {
+      process: false,
+      statusCode: StatusCodes.NOT_FOUND,
+      message: 'COMMON.NOT_FOUND',
+    };
+  }
+
+  if (user.userType.id !== 4) {
+    return {
+      process: false,
+      statusCode: StatusCodes.FORBIDDEN,
+      message: 'USER.STANDARDS_ASSIGNED_TO_TEACHERS_ONLY',
+    };
+  }
+
+  const existingAssignments = await UserStandard.findAll({
+    where: {
+      userId,
+      standardId: standardIds,
+    },
+    attributes: ['standardId'],
+  });
+
+  const alreadyAssignedIds = existingAssignments.map((item) => item.standardId);
+
+  const newStandardIds = standardIds.filter(
+    (id) => !alreadyAssignedIds.includes(id),
+  );
+
+  if (!newStandardIds.length) {
+    return {
+      process: false,
+      statusCode: StatusCodes.FORBIDDEN,
+      message: 'USER.NO_NEW_STANDARD_ASSIGNED',
+    };
+  }
+
+  const rows = newStandardIds.map((standardId) => ({
+    userId,
+    standardId,
+    createdBy: loggedInUser.id,
+  }));
+
+  await UserStandard.bulkCreate(rows);
+
+  return {
+    process: true,
+    statusCode: StatusCodes.OK,
+    data: {
+      assigned: newStandardIds.length,
+      skipped: alreadyAssignedIds.length,
+    },
+  };
+};
+
 module.exports = {
   findById,
   findByEmail,
@@ -200,4 +272,5 @@ module.exports = {
   findAll,
   createUser,
   updateUser,
+  assignStandardsToUser,
 };

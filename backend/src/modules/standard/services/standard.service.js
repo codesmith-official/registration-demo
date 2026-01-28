@@ -1,6 +1,8 @@
+const { Op } = require('sequelize');
 const Standard = require('../models/standard.model');
 const StandardSubject = require('../models/standardSubject.model');
 const Subject = require('../../subject/models/subject.model');
+const UserStandard = require('../../user/models/userStandard.model');
 
 const createOrUpdate = async (payload) => {
   let standard;
@@ -36,9 +38,34 @@ const createOrUpdate = async (payload) => {
   });
 };
 
-const getAll = async () => {
+const getAll = async (userData) => {
+  let filter = {};
+
+  // teacher: show only assigned standards
+  if (userData.userType?.id === 4) {
+    const assignedStandards = await UserStandard.findAll({
+      where: {
+        userId: userData.id,
+      },
+      attributes: ['standardId'],
+    });
+
+    const standardIds = assignedStandards.map((item) => item.standardId);
+
+    // no assignment → empty list
+    if (!standardIds.length) {
+      return [];
+    }
+
+    filter = {
+      id: {
+        [Op.in]: standardIds,
+      },
+    };
+  }
   return await Standard.findAll({
-    order: [['id', 'DESC']],
+    where: filter,
+    order: [['id', 'ASC']],
     include: [
       {
         model: Subject,

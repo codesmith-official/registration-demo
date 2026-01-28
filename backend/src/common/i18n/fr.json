@@ -35,7 +35,10 @@
   },
   "USER": {
     "CREATED": "Utilisateur créé avec succès",
-    "UPDATED": "Utilisateur mis à jour avec succès"
+    "UPDATED": "Utilisateur mis à jour avec succès",
+    "NO_NEW_STANDARD_ASSIGNED": "Aucun nouveau niveau assigné",
+    "STANDARDS_ASSIGNED_TO_TEACHERS_ONLY": "Les niveaux ne peuvent être assignés qu'aux enseignants",
+    "STANDARDS_ASSIGNED": "Niveaux assignés avec succès"
   },
   "USERTYPE": {
     "CREATED": "Type d'utilisateur créé avec succès",

@@ -2,8 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import * as Yup from 'yup';
+
+const LoginSchema = Yup.object({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  password: Yup.string().required('Password is required'),
+});
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -16,64 +25,73 @@ export default function LoginForm() {
     }
   }, [router, searchParams]);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
-    setIsLoading(false);
-
-    if (res?.error) {
-      toast.error('Invalid email or password');
-      return;
-    }
-    toast.success('Login successful!');
-    router.push('/dashboard');
-  }
-
   return (
-    <form className='space-y-4' onSubmit={handleSubmit}>
-      <div>
-        <label className='block text-sm font-medium text-gray-700'>Email</label>
-        <input
-          className='mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-          name='email'
-          type='email'
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
+    <Formik
+      initialValues={{ email: '', password: '' }}
+      validationSchema={LoginSchema}
+      onSubmit={async (values, { setSubmitting }) => {
+        const res = await signIn('credentials', {
+          email: values.email,
+          password: values.password,
+          redirect: false,
+        });
 
-      <div>
-        <label className='block text-sm font-medium text-gray-700'>
-          Password
-        </label>
-        <input
-          className='mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-          name='password'
-          type='password'
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+        setSubmitting(false);
 
-      <div className='mt-2'>
-        <button
-          className='w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded'
-          type='submit'
-          disabled={isLoading}
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </div>
-    </form>
+        if (res?.error) {
+          toast.error('Invalid email or password');
+          return;
+        }
+
+        toast.success('Login successful!');
+        router.push('/dashboard');
+      }}
+    >
+      {({ isSubmitting }) => (
+        <Form className='space-y-4'>
+          <div>
+            <label className='block text-sm font-medium text-gray-700'>
+              Email
+            </label>
+            <Field
+              name='email'
+              type='email'
+              className='mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            />
+            <ErrorMessage
+              name='email'
+              component='div'
+              className='text-sm text-red-600 mt-1'
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700'>
+              Password
+            </label>
+            <Field
+              name='password'
+              type='password'
+              className='mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            />
+            <ErrorMessage
+              name='password'
+              component='div'
+              className='text-sm text-red-600 mt-1'
+            />
+          </div>
+
+          <div className='mt-2'>
+            <button
+              type='submit'
+              disabled={isSubmitting}
+              className='w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded disabled:opacity-60'
+            >
+              {isSubmitting ? 'Logging in...' : 'Login'}
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 }

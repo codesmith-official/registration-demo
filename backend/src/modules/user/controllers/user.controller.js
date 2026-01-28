@@ -11,8 +11,8 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await userService.findByEmail(email, 'auth');
-    if (!user) {
+    const checkUser = await userService.findByEmail(email, 'auth');
+    if (!checkUser) {
       return sendError(
         res,
         req.lang,
@@ -21,7 +21,10 @@ const login = async (req, res, next) => {
       );
     }
 
-    const isValid = await userService.comparePassword(password, user.password);
+    const isValid = await userService.comparePassword(
+      password,
+      checkUser.password,
+    );
     if (!isValid) {
       return sendError(
         res,
@@ -31,11 +34,12 @@ const login = async (req, res, next) => {
       );
     }
 
+    const user = await userService.findById(checkUser.id);
     const token = jwt.sign(
       {
         id: user.id,
         email: user.email,
-        role: user.role,
+        userType: user.userType.name,
       },
       jwtConfig.secret,
       { expiresIn: jwtConfig.expiresIn },
@@ -47,7 +51,7 @@ const login = async (req, res, next) => {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role,
+        userType: user.userType,
       },
     });
   } catch (err) {

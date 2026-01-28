@@ -1,6 +1,8 @@
+import axios from 'axios';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { API_ENDPOINTS } from '@/lib/constants/api';
+import { LoginApiResponse } from '@/src/types/next-auth';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,35 +12,40 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
+
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
-        const res = await fetch(API_ENDPOINTS.LOGIN, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
-        });
+        try {
+          const res = await axios.post<LoginApiResponse>(
+            API_ENDPOINTS.LOGIN,
+            {
+              email: credentials.email,
+              password: credentials.password,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            },
+          );
 
-        if (!res.ok) return null;
+          if (!res.data?.success) return null;
 
-        const response = await res.json();
-        const data = response.data;
+          const { user, token } = res.data.data;
 
-        if (!data?.token || !data?.user) return null;
-        return {
-          id: data.user.id.toString(),
-          name: data.user.name,
-          email: data.user.email,
-          role: data.user.role,
-          token: data.token,
-        };
+          return {
+            id: user.id.toString(),
+            name: user.name,
+            email: user.email,
+            userType: user.userType,
+            token,
+          };
+        } catch {
+          return null;
+        }
       },
     }),
   ],
@@ -52,14 +59,16 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.accessToken = user.token;
-        token.role = user.role;
+        token.userType = user.userType;
       }
       return token;
     },
 
     async session({ session, token }) {
-      session.user.id = token.id as string;
-      session.user.role = token.role as string;
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.userType = token.userType;
+      }
       session.accessToken = token.accessToken as string;
       return session;
     },

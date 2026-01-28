@@ -12,7 +12,7 @@ export default function LoginForm() {
   useEffect(() => {
     if (searchParams.get('logout') === '1') {
       toast.success('Logged out successfully');
-      router.replace('/login');
+      router.replace('/');
     }
   }, [router, searchParams]);
 

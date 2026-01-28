@@ -5,7 +5,7 @@ import LogoutButton from './logout-button';
 export default async function DashboardPage() {
   const user = await fetchCurrentUser();
   if (!user) {
-    redirect('/login');
+    redirect('/');
   }
 
   return (

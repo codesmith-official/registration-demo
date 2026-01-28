@@ -1,15 +1,13 @@
-import Link from 'next/link';
+import LoginForm from '@/app/login/login-form';
+import { checkAuthExists } from '@/lib/auth-guards';
 
-export default function Home() {
+export default async function LoginPage() {
+  await checkAuthExists();
+
   return (
-    <>
-      <h1>Next.js Auth Playground</h1>
-      <p>Authentication learning project</p>
-      <div className='mt-3'>
-        <Link href={'/sign-up'}>Signup</Link>
-        <span className='mx-4'>|</span>
-        <Link href={'/login'}>Login</Link>
-      </div>
-    </>
+    <div className='w-full max-w-sm bg-white p-6 rounded-lg shadow-md'>
+      <h1 className='text-2xl font-semibold text-center mb-6'>Login</h1>
+      <LoginForm />
+    </div>
   );
 }

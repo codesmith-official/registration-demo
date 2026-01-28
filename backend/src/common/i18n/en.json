@@ -2,7 +2,8 @@
   "COMMON": {
     "SUCCESS": "Success",
     "NOT_FOUND": "Record not found",
-    "SERVER_ERROR": "Something went wrong"
+    "SERVER_ERROR": "Something went wrong",
+    "PERMISSION_DENIED": "Permission denied"
   },
   "SUBJECT": {
     "CREATED": "Subject created successfully",
@@ -27,10 +28,13 @@
   },
   "AUTH": {
     "LOGIN_SUCCESS": "Login successful.",
-    "REGISTER_SUCCESS": "User registered successfully.",
     "INVALID_CREDENTIALS": "Invalid email or password.",
     "USER_ALREADY_EXISTS": "A user with this email already exists.",
     "UNAUTHORIZED": "You are not authorized to perform this action."
+  },
+  "USER": {
+    "CREATED": "User created successfully",
+    "UPDATED": "User updated successfully"
   },
   "USERTYPE": {
     "CREATED": "User-type created successfully",

@@ -1,20 +1,85 @@
 const ExcelJS = require('exceljs');
 const path = require('path');
+const sequelize = require('../../../config/sequelize');
+const { Op } = require('sequelize');
 const Student = require('../models/student.model');
 const Standard = require('../../standard/models/standard.model');
+const User = require('../../user/models/user.model');
+const UserType = require('../../userType/models/userType.model');
+const Permission = require('../../permission/models/permission.model');
+const userService = require('../../user/services/user.service');
 const { checkAndCreateDirectory } = require('../../../utils/filesystem');
 
-const createOrUpdate = async (payload) => {
-  if (payload.id) {
-    const student = await Student.findByPk(payload.id);
-    if (!student) return null;
+const createOrUpdate = async (payload, loggedInUser) => {
+  const transaction = await sequelize.transaction();
+  try {
+    if (payload.id) {
+      const student = await Student.findByPk(payload.id, { transaction });
+      if (!student) {
+        await transaction.rollback();
+        return null;
+      }
+      await student.update(payload);
 
-    await student.update(payload);
+      if (student.user_id) {
+        const userUpdateData = {};
+
+        if (payload.name)
+          userUpdateData.name = `${payload.first_name} ${payload.last_name}`;
+        if (payload.email) userUpdateData.email = payload.email;
+
+        if (Object.keys(userUpdateData).length > 0) {
+          const user = await User.findByPk(student.user_id, { transaction });
+          if (user) {
+            await user.update(userUpdateData, { transaction });
+          }
+        }
+      }
+
+      await transaction.commit();
+      return await getById(student.id);
+    }
+
+    const studentUserType = await UserType.findOne({
+      where: {
+        name: {
+          [Op.like]: 'student',
+        },
+      },
+      include: [
+        {
+          model: Permission,
+          as: 'permissions',
+          attributes: ['id'],
+          through: { attributes: [] },
+        },
+      ],
+    });
+
+    const permissionIds = studentUserType.permissions.map(
+      (permission) => permission.id,
+    );
+
+    const user = await userService.createUser(
+      {
+        name: `${payload.first_name} ${payload.last_name}`,
+        email: payload.email,
+        password: payload.password,
+        user_type_id: studentUserType.id,
+        permissions: permissionIds,
+      },
+      loggedInUser,
+    );
+
+    payload.user_id = user.id;
+    const student = await Student.create(payload, { transaction });
+    await transaction.commit();
     return await getById(student.id);
+  } catch (error) {
+    console.log(error);
+    await transaction.rollback();
+    return null;
   }
-
-  const student = await Student.create(payload);
-  return await getById(student.id);
 };
 
 const getAll = async () => {

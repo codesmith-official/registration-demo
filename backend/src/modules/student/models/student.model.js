@@ -9,6 +9,11 @@ const Student = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+    },
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,

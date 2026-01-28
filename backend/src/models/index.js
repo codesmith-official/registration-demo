@@ -7,6 +7,8 @@ const Marksheet = require('../modules/marksheet/models/marksheet.model');
 const Permission = require('../modules/permission/models/permission.model');
 const UserTypePermission = require('../modules/permission/models/userTypePermission.model');
 const UserType = require('../modules/userType/models/userType.model');
+const User = require('../modules/user/models/user.model');
+const UserPermission = require('../modules/user/models/userPermission.model');
 
 Standard.belongsToMany(Subject, {
   through: StandardSubject,
@@ -39,6 +41,35 @@ Permission.belongsToMany(UserType, {
   otherKey: 'user_type_id',
   as: 'userTypes',
 });
+
+User.belongsTo(UserType, { foreignKey: 'user_type_id', as: 'userType' });
+User.belongsToMany(Permission, {
+  through: UserPermission,
+  foreignKey: 'user_id',
+  otherKey: 'permission_id',
+  as: 'permissions',
+});
+Permission.belongsToMany(User, {
+  through: UserPermission,
+  foreignKey: 'permission_id',
+  otherKey: 'user_id',
+  as: 'users',
+});
+UserPermission.belongsTo(Permission, {
+  foreignKey: 'permission_id',
+  as: 'permission',
+});
+
+Student.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user',
+});
+
+User.hasOne(Student, {
+  foreignKey: 'user_id',
+  as: 'student',
+});
+
 module.exports = {
   sequelize,
   Subject,
@@ -48,4 +79,7 @@ module.exports = {
   Marksheet,
   Permission,
   UserTypePermission,
+  User,
+  UserPermission,
+  UserType,
 };

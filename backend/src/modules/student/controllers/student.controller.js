@@ -7,7 +7,7 @@ const {
 
 const createOrUpdate = async (req, res, next) => {
   try {
-    const result = await service.createOrUpdate(req.body);
+    const result = await service.createOrUpdate(req.body, req.user);
     if (!result)
       return sendError(
         res,

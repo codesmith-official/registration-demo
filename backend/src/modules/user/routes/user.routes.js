@@ -1,9 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/user.controller');
+const validator = require('../../../middlewares/validator.middleware');
+const validation = require('../validations/user.validation');
+const controller = require('../controllers/user.controller');
 const authMiddleware = require('../../../middlewares/auth.middleware');
+const {
+  checkPermission,
+} = require('../../../middlewares/permission.middleware');
 
-router.get('/me', authMiddleware, userController.getMe, userController.getUser);
-router.post('/register', userController.register);
-router.post('/login', userController.login);
+router
+  .route('/')
+  .all(authMiddleware)
+  .get(checkPermission('user.list'), controller.getAllUsers)
+  .post(
+    checkPermission('user.create'),
+    validator(validation.createUser),
+    controller.createUser,
+  );
+
+router.post('/login', validator(validation.login), controller.login);
+router.get('/me', authMiddleware, controller.getMe, controller.getUser);
+
+router
+  .route('/:id')
+  .all(authMiddleware)
+  .get(
+    checkPermission('user.view'),
+    validator(validation.idParam),
+    controller.getUser,
+  )
+  .patch(
+    checkPermission('user.update'),
+    validator(validation.updateUser),
+    controller.updateUser,
+  );
+
 module.exports = router;

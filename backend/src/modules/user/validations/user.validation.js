@@ -1,23 +1,34 @@
 const Joi = require('joi');
 
-const createOrUpdate = {
-  body: Joi.object({
-    id: Joi.number().optional(),
-    subject: Joi.string().min(2).max(100).when('id', {
-      is: Joi.exist(),
-      then: Joi.optional(),
-      otherwise: Joi.required(),
-    }),
-  }),
-};
-
-const idParam = {
-  params: Joi.object({
-    id: Joi.number().required(),
-  }),
-};
-
 module.exports = {
-  createOrUpdate,
-  idParam,
+  login: {
+    body: Joi.object({
+      email: Joi.string().required(),
+      password: Joi.string().required(),
+    }),
+  },
+  createUser: {
+    body: Joi.object({
+      email: Joi.string().required(),
+      password: Joi.string().required(),
+      name: Joi.string().required(),
+      user_type_id: Joi.number().required(),
+      permissions: Joi.array().items(Joi.number()).optional().default([]),
+      status: Joi.boolean().optional().default(true),
+    }),
+  },
+  updateUser: {
+    body: Joi.object({
+      id: Joi.number().required(),
+      name: Joi.string().optional(),
+      user_type_id: Joi.number().optional(),
+      permissions: Joi.array().items(Joi.number()).optional().default([]),
+      status: Joi.boolean().optional().default(true),
+    }),
+  },
+  idParam: {
+    params: Joi.object({
+      id: Joi.number().required(),
+    }),
+  },
 };

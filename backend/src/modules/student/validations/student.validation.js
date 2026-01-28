@@ -29,6 +29,11 @@ module.exports = {
         then: Joi.optional(),
         otherwise: Joi.required(),
       }),
+      password: Joi.string().when('id', {
+        is: Joi.exist(),
+        then: Joi.optional(),
+        otherwise: Joi.required(),
+      }),
       contact_number: Joi.string().when('id', {
         is: Joi.exist(),
         then: Joi.optional(),

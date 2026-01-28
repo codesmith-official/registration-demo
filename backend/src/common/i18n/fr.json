@@ -1,36 +1,41 @@
 {
   "COMMON": {
-    "SUCCESS": "Success",
-    "NOT_FOUND": "Record not found",
-    "SERVER_ERROR": "Something went wrong"
+    "SUCCESS": "Succès",
+    "NOT_FOUND": "Enregistrement non trouvé",
+    "SERVER_ERROR": "Une erreur est survenue",
+    "PERMISSION_DENIED": "Permission refusée"
   },
   "SUBJECT": {
-    "CREATED": "Subject created successfully",
-    "UPDATED": "Subject updated successfully",
-    "DELETED": "Subject deleted successfully"
+    "CREATED": "Matière créée avec succès",
+    "UPDATED": "Matière mise à jour avec succès",
+    "DELETED": "Matière supprimée avec succès"
   },
   "STANDARD": {
-    "CREATED": "Standard created successfully",
-    "UPDATED": "Standard updated successfully",
-    "DELETED": "Standard deleted successfully"
+    "CREATED": "Niveau créé avec succès",
+    "UPDATED": "Niveau mis à jour avec succès",
+    "DELETED": "Niveau supprimé avec succès"
   },
   "STUDENT": {
-    "CREATED": "Student created successfully",
-    "UPDATED": "Student updated successfully",
-    "DELETED": "Student deleted successfully",
-    "FILE_GENERATED": "Export file has been generated",
-    "EXCEL_FILE_REQUIRED": "Excel file is required",
-    "IMPORT_COMPLETED": "Import process has been completed"
+    "CREATED": "Étudiant créé avec succès",
+    "UPDATED": "Étudiant mis à jour avec succès",
+    "DELETED": "Étudiant supprimé avec succès",
+    "FILE_GENERATED": "Le fichier d'exportation a été généré",
+    "EXCEL_FILE_REQUIRED": "Un fichier Excel est requis",
+    "IMPORT_COMPLETED": "Le processus d'importation est terminé"
   },
   "MARKSHEET": {
-    "SAVED": "Marksheet saved successfully"
+    "SAVED": "Relevé de notes enregistré avec succès"
   },
   "AUTH": {
     "LOGIN_SUCCESS": "Connexion réussie.",
     "REGISTER_SUCCESS": "Utilisateur enregistré avec succès.",
-    "INVALID_CREDENTIALS": "Adresse e-mail ou mot de passe invalide.",
-    "USER_ALREADY_EXISTS": "Un utilisateur avec cette adresse e-mail existe déjà.",
+    "INVALID_CREDENTIALS": "E-mail ou mot de passe invalide.",
+    "USER_ALREADY_EXISTS": "Un utilisateur avec cet e-mail existe déjà.",
     "UNAUTHORIZED": "Vous n'êtes pas autorisé à effectuer cette action."
+  },
+  "USER": {
+    "CREATED": "Utilisateur créé avec succès",
+    "UPDATED": "Utilisateur mis à jour avec succès"
   },
   "USERTYPE": {
     "CREATED": "Type d'utilisateur créé avec succès",
@@ -38,8 +43,8 @@
     "DELETED": "Type d'utilisateur supprimé avec succès"
   },
   "PERMISSION": {
-    "CREATED": "Autorisation créée avec succès",
-    "UPDATED": "Autorisation mise à jour avec succès",
-    "DELETED": "Autorisation supprimée avec succès"
+    "CREATED": "Permission créée avec succès",
+    "UPDATED": "Permission mise à jour avec succès",
+    "DELETED": "Permission supprimée avec succès"
   }
 }

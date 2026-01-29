@@ -136,9 +136,28 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    const done = await userService.deleteUser(req.params.id);
+    if (!done)
+      return sendError(
+        res,
+        req.lang,
+        'COMMON.NOT_FOUND',
+        StatusCodes.NOT_FOUND,
+      );
+
+    return sendResponse(res, req.lang, 'USER.DELETED');
+  } catch (e) {
+    next(e);
+  }
+};
+
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await userService.findAll(req.user);
+    const page = +req.query?.page || 1;
+    const limit = +req.query?.limit || 10;
+    const users = await userService.findAll(req.user, { page, limit });
 
     return sendResponse(res, req.lang, 'COMMON.SUCCESS', users, StatusCodes.OK);
   } catch (err) {
@@ -174,6 +193,7 @@ module.exports = {
   getUser,
   createUser,
   updateUser,
+  deleteUser,
   getAllUsers,
   assignStandardsToUser,
 };

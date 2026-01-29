@@ -41,6 +41,11 @@ router
     checkPermission('user.update'),
     validator(validation.updateUser),
     controller.updateUser,
+  )
+  .delete(
+    checkPermission('user.delete'),
+    validator(validation.idParam),
+    controller.deleteUser,
   );
 
 module.exports = router;

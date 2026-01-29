@@ -40,6 +40,7 @@ Permission.belongsToMany(UserType, {
   foreignKey: 'permission_id',
   otherKey: 'user_type_id',
   as: 'userTypes',
+  onDelete: 'CASCADE',
 });
 
 User.belongsTo(UserType, { foreignKey: 'user_type_id', as: 'userType' });
@@ -48,12 +49,14 @@ User.belongsToMany(Permission, {
   foreignKey: 'user_id',
   otherKey: 'permission_id',
   as: 'permissions',
+  onDelete: 'CASCADE',
 });
 Permission.belongsToMany(User, {
   through: UserPermission,
   foreignKey: 'permission_id',
   otherKey: 'user_id',
   as: 'users',
+  onDelete: 'CASCADE',
 });
 UserPermission.belongsTo(Permission, {
   foreignKey: 'permission_id',
@@ -63,11 +66,13 @@ UserPermission.belongsTo(Permission, {
 Student.belongsTo(User, {
   foreignKey: 'user_id',
   as: 'user',
+  onDelete: 'CASCADE',
 });
 
 User.hasOne(Student, {
   foreignKey: 'user_id',
   as: 'student',
+  onDelete: 'CASCADE',
 });
 
 module.exports = {

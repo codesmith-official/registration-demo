@@ -19,8 +19,8 @@ module.exports = {
   },
   updateUser: {
     body: Joi.object({
-      id: Joi.number().required(),
       name: Joi.string().optional(),
+      email: Joi.string().optional(),
       user_type_id: Joi.number().optional(),
       permissions: Joi.array().items(Joi.number()).optional().default([]),
       status: Joi.boolean().optional().default(true),

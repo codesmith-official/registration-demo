@@ -1,18 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import * as Yup from 'yup';
-
-const LoginSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  password: Yup.string().required('Password is required'),
-});
+import { LoginSchema } from '@/src/validations/login.schema';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -21,7 +14,7 @@ export default function LoginForm() {
   useEffect(() => {
     if (searchParams.get('logout') === '1') {
       toast.success('Logged out successfully');
-      router.replace('/');
+      router.replace('/auth');
     }
   }, [router, searchParams]);
 
@@ -44,7 +37,7 @@ export default function LoginForm() {
         }
 
         toast.success('Login successful!');
-        router.push('/dashboard');
+        router.push('/admin/dashboard');
       }}
     >
       {({ isSubmitting }) => (

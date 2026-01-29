@@ -46,7 +46,7 @@ const Student = sequelize.define(
   {
     tableName: 'dp_students',
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
     underscored: true,
   },
 );

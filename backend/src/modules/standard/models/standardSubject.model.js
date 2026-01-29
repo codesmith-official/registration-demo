@@ -21,7 +21,7 @@ const StandardSubject = sequelize.define(
   {
     tableName: 'dp_standard_subjects',
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
     underscored: true,
   },
 );

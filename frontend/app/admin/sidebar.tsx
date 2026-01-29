@@ -4,39 +4,39 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { hasPermission } from '@/lib/permissions';
-import { useAppDispatch } from '@/store/hooks';
-import { useAppSelector } from '@/store/hooks';
-import { fetchMe } from '@/store/slices/me.slice';
+import { useAppDispatch } from '@/src/store/hooks';
+import { useAppSelector } from '@/src/store/hooks';
+import { fetchMe } from '@/src/store/slices/me.slice';
 
 const SIDEBAR_MENU = [
   {
     label: 'Dashboard',
-    href: '/dashboard',
+    href: '/admin/dashboard',
     permission: null,
   },
   {
     label: 'Users',
-    href: '/users',
+    href: '/admin/users',
     permission: 'user.list',
   },
   {
     label: 'Standards',
-    href: '/standards',
+    href: '/admin/standards',
     permission: 'standard.list',
   },
   {
     label: 'Subjects',
-    href: '/subjects',
+    href: '/admin/subjects',
     permission: 'subject.list',
   },
   {
     label: 'Students',
-    href: '/students',
+    href: '/admin/students',
     permission: 'student.list',
   },
   {
     label: 'Reports',
-    href: '/reports',
+    href: '/admin/reports',
     permission: 'marksheet.list',
   },
 ];

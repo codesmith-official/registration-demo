@@ -13,11 +13,21 @@ const UserPermission = sequelize.define(
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
     },
 
     permissionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'permissions',
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
     },
   },
   {

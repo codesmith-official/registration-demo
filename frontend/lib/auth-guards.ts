@@ -4,12 +4,12 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function requireAuth() {
   const session = await getServerSession(authOptions);
-  if (!session) redirect('/');
+  if (!session) redirect('/auth');
   return session;
 }
 
 export async function checkAuthExists() {
   const session = await getServerSession(authOptions);
-  if (session) redirect('/dashboard');
+  if (session) redirect('/admin/dashboard');
   return;
 }

@@ -1,13 +1,10 @@
 import LogoutButton from './logout-button';
+import PageTitle from './page-title';
 
-export default function TopBar() {
+export default function Topbar() {
   return (
     <header className='h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6'>
-      <div>
-        <h2 className='text-lg font-semibold text-gray-900'>Dashboard</h2>
-        <p className='text-xs text-gray-500'>Overview</p>
-      </div>
-
+      <PageTitle />
       <div className='flex items-center gap-4'>
         <LogoutButton />
       </div>

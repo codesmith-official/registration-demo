@@ -37,7 +37,8 @@ const comparePassword = async (plainPassword, hashedPassword) => {
   return bcrypt.compare(plainPassword, hashedPassword);
 };
 
-const findAll = async (userData) => {
+const findAll = async (userData, { page, limit }) => {
+  const offset = (page - 1) * limit;
   const filter =
     userData.userType?.id === 1
       ? {}
@@ -51,23 +52,35 @@ const findAll = async (userData) => {
             },
           ],
         };
-  return User.findAll({
+
+  const { rows, count } = await User.findAndCountAll({
     where: filter,
+    limit,
+    offset,
     order: [['id', 'DESC']],
     include: [
       {
         model: UserType,
         as: 'userType',
         attributes: ['id', 'name'],
-      },
-      {
-        model: Permission,
-        as: 'permissions',
-        attributes: ['id', 'name', 'key'],
-        through: { attributes: [] },
+        required: false,
       },
     ],
+    distinct: true,
+    subQuery: false,
   });
+
+  const total = Number.isInteger(count) ? count : 0;
+
+  return {
+    data: rows,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: total ? Math.ceil(total / limit) : 0,
+    },
+  };
 };
 
 const createUser = async (payload, loggedInUser) => {
@@ -265,6 +278,35 @@ const assignStandardsToUser = async (payload, loggedInUser) => {
   };
 };
 
+const deleteUser = async (id) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const user = await User.findByPk(id, { transaction });
+    if (!user) {
+      await transaction.rollback();
+      return null;
+    }
+
+    await UserPermission.destroy({
+      where: { userId: id },
+      transaction,
+    });
+
+    await UserStandard.destroy({
+      where: { userId: id },
+      transaction,
+    });
+
+    await user.destroy({ transaction });
+
+    await transaction.commit();
+    return true;
+  } catch {
+    await transaction.rollback();
+    throw null;
+  }
+};
+
 module.exports = {
   findById,
   findByEmail,
@@ -272,5 +314,6 @@ module.exports = {
   findAll,
   createUser,
   updateUser,
+  deleteUser,
   assignStandardsToUser,
 };

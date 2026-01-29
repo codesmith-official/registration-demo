@@ -12,10 +12,38 @@ const createOrUpdate = async (payload) => {
   return await Subject.create({ subject: payload.subject });
 };
 
-const getAll = async () => {
-  return await Subject.findAll({
+const getAll = async ({ page, limit }) => {
+  if (limit === 'all') {
+    const rows = await Subject.findAll({
+      order: [['id', 'ASC']],
+    });
+
+    return {
+      data: rows,
+      pagination: null,
+    };
+  }
+
+  const parsedLimit = +limit || 10;
+  const offset = (page - 1) * parsedLimit;
+
+  const { rows, count } = await Subject.findAndCountAll({
+    limit: parsedLimit,
+    offset,
     order: [['id', 'ASC']],
   });
+
+  const total = Number.isInteger(count) ? count : 0;
+
+  return {
+    data: rows,
+    pagination: {
+      total: count,
+      page,
+      limit: parsedLimit,
+      totalPages: total ? Math.ceil(total / parsedLimit) : 0,
+    },
+  };
 };
 
 const getById = async (id) => {

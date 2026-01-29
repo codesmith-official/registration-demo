@@ -38,7 +38,8 @@ const createOrUpdate = async (payload) => {
   });
 };
 
-const getAll = async (userData) => {
+const getAll = async (userData, { page, limit }) => {
+  const offset = (page - 1) * limit;
   let filter = {};
 
   // teacher: show only assigned standards
@@ -54,7 +55,10 @@ const getAll = async (userData) => {
 
     // no assignment → empty list
     if (!standardIds.length) {
-      return [];
+      return {
+        data: [],
+        pagination: null,
+      };
     }
 
     filter = {
@@ -63,18 +67,23 @@ const getAll = async (userData) => {
       },
     };
   }
-  return await Standard.findAll({
+  const { rows, count } = await Standard.findAndCountAll({
     where: filter,
+    limit,
+    offset,
     order: [['id', 'ASC']],
-    include: [
-      {
-        model: Subject,
-        as: 'subjects',
-        through: { attributes: [] },
-        attributes: ['id', 'subject'],
-      },
-    ],
   });
+  const total = Number.isInteger(count) ? count : 0;
+
+  return {
+    data: rows,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: total ? Math.ceil(total / limit) : 0,
+    },
+  };
 };
 
 const getById = async (id) => {

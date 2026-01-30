@@ -59,7 +59,6 @@ export default function CreateStudentPage() {
           standards={standards}
           submitLabel='Create User'
           onSubmit={async (values) => {
-            console.log('clicked');
             try {
               const res = await createOrUpdateStudent(values);
               toast.success(res.message);

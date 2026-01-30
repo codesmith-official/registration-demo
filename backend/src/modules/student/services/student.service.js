@@ -78,7 +78,6 @@ const createOrUpdate = async (payload, loggedInUser) => {
     await transaction.commit();
     return await getById(student.id);
   } catch (error) {
-    console.log(error);
     await transaction.rollback();
     return null;
   }

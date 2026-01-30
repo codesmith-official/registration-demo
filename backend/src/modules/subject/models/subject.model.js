@@ -17,7 +17,7 @@ const Subject = sequelize.define(
   {
     tableName: 'dp_subjects',
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
     underscored: true,
   },
 );

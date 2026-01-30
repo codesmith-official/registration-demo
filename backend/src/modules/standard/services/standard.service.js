@@ -1,41 +1,57 @@
 const { Op } = require('sequelize');
+const sequelize = require('../../../config/sequelize');
 const Subject = require('../../subject/models/subject.model');
 const UserStandard = require('../../user/models/userStandard.model');
 const Standard = require('../models/standard.model');
 const StandardSubject = require('../models/standardSubject.model');
 
 const createOrUpdate = async (payload) => {
-  let standard;
+  const transaction = await sequelize.transaction();
+  try {
+    let standard;
+    if (payload.id) {
+      standard = await Standard.findByPk(payload.id, { transaction });
+      if (!standard) {
+        await transaction.rollback();
+        return null;
+      }
 
-  if (payload.id) {
-    standard = await Standard.findByPk(payload.id);
-    if (!standard) return null;
+      await standard.update({ standard: payload.standard }, { transaction });
 
-    await standard.update({ standard: payload.standard });
+      await StandardSubject.destroy(
+        {
+          where: { standard_id: payload.id },
+        },
+        { transaction },
+      );
+    } else {
+      standard = await Standard.create(
+        { standard: payload.standard },
+        { transaction },
+      );
+    }
 
-    await StandardSubject.destroy({
-      where: { standard_id: payload.id },
+    const mappings = payload.subject_ids.map((subject_id) => ({
+      standard_id: standard.id,
+      subject_id,
+    }));
+
+    await StandardSubject.bulkCreate(mappings, { transaction });
+    await transaction.commit();
+    return await Standard.findByPk(standard.id, {
+      include: [
+        {
+          model: Subject,
+          as: 'subjects',
+          through: { attributes: [] },
+          attributes: ['id', 'subject'],
+        },
+      ],
     });
-  } else {
-    standard = await Standard.create({ standard: payload.standard });
+  } catch {
+    await transaction.rollback();
+    return null;
   }
-
-  const mappings = payload.subject_ids.map((subject_id) => ({
-    standard_id: standard.id,
-    subject_id,
-  }));
-
-  await StandardSubject.bulkCreate(mappings);
-  return await Standard.findByPk(standard.id, {
-    include: [
-      {
-        model: Subject,
-        as: 'subjects',
-        through: { attributes: [] },
-        attributes: ['id', 'subject'],
-      },
-    ],
-  });
 };
 
 const getAll = async (userData, { page, limit }) => {
@@ -100,10 +116,24 @@ const getById = async (id) => {
 };
 
 const remove = async (id) => {
-  const standard = await Standard.findByPk(id);
-  if (!standard) return null;
+  const transaction = await sequelize.transaction();
+  try {
+    const standard = await Standard.findByPk(id, { transaction });
+    if (!standard) {
+      await transaction.rollback();
+      return null;
+    }
 
-  await standard.destroy();
+    await UserStandard.destroy({
+      where: { standardId: id },
+      transaction,
+    });
+
+    await standard.destroy({ transaction });
+  } catch {
+    await transaction.rollback();
+    return null;
+  }
   return true;
 };
 

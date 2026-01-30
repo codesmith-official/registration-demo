@@ -17,7 +17,7 @@ const Standard = sequelize.define(
   {
     tableName: 'dp_standards',
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
     underscored: true,
   },
 );

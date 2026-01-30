@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
     define: {
       underscored: true,
       freezeTableName: true,
-      paranoid: true,
+      paranoid: false,
     },
   },
 );

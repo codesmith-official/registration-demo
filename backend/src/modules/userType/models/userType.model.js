@@ -22,7 +22,7 @@ const UserType = sequelize.define(
   {
     tableName: 'dp_usertypes',
     timestamps: true,
-    paranoid: true,
+    paranoid: false,
     underscored: true,
   },
 );

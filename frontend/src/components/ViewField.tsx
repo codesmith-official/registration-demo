@@ -1,6 +1,6 @@
 interface ViewData {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 export default function ViewField({ label, value }: ViewData) {

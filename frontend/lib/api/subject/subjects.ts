@@ -17,6 +17,12 @@ export interface SubjectsApiResponse {
   pagination: Pagination;
 }
 
+export interface SubjectByStandard {
+  id: number;
+  standard_id: number;
+  subject_id: number;
+  subject: Subject;
+}
 export async function fetchAllSubjects(): Promise<Subject[]> {
   const res = await api.get('/subjects', {
     params: { limit: 'all' },
@@ -34,4 +40,11 @@ export async function fetchSubjects(
   });
 
   return res.data.data;
+}
+
+export async function fetchSubjectsByStandard(
+  standardId: number,
+): Promise<Subject[]> {
+  const res = await api.get(`/subjects/standard/${standardId}`);
+  return res.data.data.map((item: SubjectByStandard) => item.subject);
 }

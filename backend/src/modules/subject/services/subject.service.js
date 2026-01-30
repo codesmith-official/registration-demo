@@ -48,6 +48,24 @@ const getAll = async ({ page, limit }) => {
   };
 };
 
+const getByStandard = async (id) => {
+  const rows = await StandardSubject.findAll({
+    where: {
+      standard_id: id,
+    },
+    order: [['id', 'ASC']],
+    include: [
+      {
+        model: Subject,
+        as: 'subject',
+        attributes: ['id', 'subject'],
+      },
+    ],
+  });
+
+  return rows;
+};
+
 const getById = async (id) => {
   return await Subject.findByPk(id);
 };
@@ -78,6 +96,7 @@ const remove = async (id) => {
 module.exports = {
   createOrUpdate,
   getAll,
+  getByStandard,
   getById,
   remove,
 };

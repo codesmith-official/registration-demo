@@ -30,4 +30,7 @@ router
     validator(validation.idParam),
     controller.remove,
   );
+
+router.route('/standard/:id').get(controller.listByStandard);
+
 module.exports = router;

@@ -1,5 +1,6 @@
 const sequelize = require('../config/sequelize');
 const Marksheet = require('../modules/marksheet/models/marksheet.model');
+const Report = require('../modules/marksheet/models/report.model');
 const Permission = require('../modules/permission/models/permission.model');
 const UserTypePermission = require('../modules/permission/models/userTypePermission.model');
 const Standard = require('../modules/standard/models/standard.model');
@@ -75,6 +76,15 @@ User.hasOne(Student, {
   onDelete: 'CASCADE',
 });
 
+Student.hasOne(Report, { foreignKey: 'student_id', as: 'report' });
+Report.belongsTo(Student, { foreignKey: 'student_id', as: 'student' });
+Report.belongsTo(Standard, { foreignKey: 'standard_id', as: 'standard' });
+
+StandardSubject.belongsTo(Subject, {
+  foreignKey: 'subject_id',
+  as: 'subject',
+});
+
 module.exports = {
   sequelize,
   Subject,
@@ -87,4 +97,5 @@ module.exports = {
   User,
   UserPermission,
   UserType,
+  Report,
 };

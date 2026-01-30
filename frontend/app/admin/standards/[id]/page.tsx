@@ -20,14 +20,14 @@ export default function ViewStandardPage() {
     ? hasPermission(me.user_type_id, me.permissions, 'standard.view')
     : false;
 
-  const [standard, setUser] = useState<StandardDetail | null>(null);
+  const [standard, setStandard] = useState<StandardDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!canView) return;
 
     fetchStandard(id)
-      .then(setUser)
+      .then(setStandard)
       .finally(() => setLoading(false));
   }, [id, canView]);
 

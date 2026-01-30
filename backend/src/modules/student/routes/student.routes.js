@@ -22,8 +22,17 @@ router
     controller.createOrUpdate,
   );
 
-router.get('/export', controller.exportStudents);
-router.post('/import', uploadExcel.single('file'), controller.importStudents);
+router.get(
+  '/export',
+  checkPermission('student.export'),
+  controller.exportStudents,
+);
+router.post(
+  '/import',
+  checkPermission('student.import'),
+  uploadExcel.single('file'),
+  controller.importStudents,
+);
 
 router
   .route('/:id')
@@ -37,5 +46,7 @@ router
     validator(validation.idParam),
     controller.remove,
   );
+
+router.route('/standard/:id').get(controller.listByStandard);
 
 module.exports = router;

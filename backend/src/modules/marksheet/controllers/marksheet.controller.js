@@ -1,6 +1,17 @@
 const { sendResponse } = require('../../../common/responses/response.helper');
 const service = require('../services/marksheet.service');
 
+const list = async (req, res, next) => {
+  try {
+    const page = +req.query?.page || 1;
+    const limit = +req.query?.limit || 10;
+    const data = await service.getAll({ page, limit });
+    return sendResponse(res, req.lang, 'COMMON.SUCCESS', data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createOrUpdate = async (req, res, next) => {
   try {
     const data = await service.createOrUpdate(req.body);
@@ -19,4 +30,4 @@ const getByStudent = async (req, res, next) => {
   }
 };
 
-module.exports = { createOrUpdate, getByStudent };
+module.exports = { list, createOrUpdate, getByStudent };

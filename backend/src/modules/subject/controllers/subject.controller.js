@@ -36,6 +36,15 @@ const list = async (req, res, next) => {
   }
 };
 
+const listByStandard = async (req, res, next) => {
+  try {
+    const data = await subjectService.getByStandard(req.params.id);
+    return sendResponse(res, req.lang, 'COMMON.SUCCESS', data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const info = async (req, res, next) => {
   try {
     const data = await subjectService.getById(req.params.id);
@@ -77,6 +86,7 @@ const remove = async (req, res, next) => {
 module.exports = {
   createOrUpdate,
   list,
+  listByStandard,
   info,
   remove,
 };

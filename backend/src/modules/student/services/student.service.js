@@ -114,6 +114,17 @@ const getAll = async ({ page, limit }) => {
   };
 };
 
+const getByStandard = async (id) => {
+  const rows = await Student.findAll({
+    where: {
+      standard_id: id,
+    },
+    order: [['id', 'ASC']],
+  });
+
+  return rows;
+};
+
 const getById = async (id) => {
   return await Student.findByPk(id, {
     include: [
@@ -285,6 +296,7 @@ const importStudents = async (filePath) => {
 module.exports = {
   createOrUpdate,
   getAll,
+  getByStandard,
   getById,
   remove,
   exportStudents,

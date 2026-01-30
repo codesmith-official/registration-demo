@@ -13,7 +13,7 @@ const checkPermission = (requiredPermission) => {
           res,
           req.lang,
           'AUTH.UNAUTHORIZED',
-          StatusCodes.UNAUTHORIZED,
+          StatusCodes.FORBIDDEN,
         );
       }
 

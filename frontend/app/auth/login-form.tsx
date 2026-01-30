@@ -16,6 +16,11 @@ export default function LoginForm() {
       toast.success('Logged out successfully');
       router.replace('/auth');
     }
+
+    if (searchParams.get('expired') === '1') {
+      toast.error('Session Expired..!!! Please login again.');
+      router.replace('/auth');
+    }
   }, [router, searchParams]);
 
   return (

@@ -9,15 +9,18 @@ const controller = require('../controllers/marksheet.controller');
 const validation = require('../validations/marksheet.validation');
 
 router.use(authMiddleware);
-router.post(
-  '/',
-  checkPermissionDynamic({
-    create: 'marksheet.create',
-    update: 'marksheet.update',
-  }),
-  validator(validation.createOrUpdate),
-  controller.createOrUpdate,
-);
+router
+  .route('/')
+  .get(checkPermission('marksheet.list'), controller.list)
+  .post(
+    checkPermissionDynamic({
+      create: 'marksheet.create',
+      update: 'marksheet.update',
+    }),
+    validator(validation.createOrUpdate),
+    controller.createOrUpdate,
+  );
+
 router.get(
   '/:student_id',
   checkPermission('marksheet.view'),

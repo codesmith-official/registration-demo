@@ -32,6 +32,12 @@ export interface StudentsApiResponse {
   pagination: Pagination;
 }
 
+export interface StudentsByStandard {
+  id: number;
+  first_name: string;
+  last_name: string;
+}
+
 export async function fetchStudents(
   page = 1,
   limit = 10,
@@ -39,6 +45,14 @@ export async function fetchStudents(
   const res = await api.get('/students', {
     params: { page, limit },
   });
+
+  return res.data.data;
+}
+
+export async function fetchStudentsByStandard(
+  standardId: number,
+): Promise<StudentsByStandard[]> {
+  const res = await api.get(`/students/standard/${standardId}`);
 
   return res.data.data;
 }

@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
-const jwtConfig = require('../config/jwt');
+const jwt = require('jsonwebtoken');
 const { sendError } = require('../common/responses/response.helper');
+const jwtConfig = require('../config/jwt');
 const userService = require('../modules/user/services/user.service');
 
 const authMiddleware = async (req, res, next) => {

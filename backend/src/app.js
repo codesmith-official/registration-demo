@@ -1,15 +1,15 @@
-const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const express = require('express');
 const helmet = require('helmet');
 const hpp = require('hpp');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const app = express();
-const whitelistedDomainList = require('./core/whitelistedDomainList');
 const apiRateLimiter = require('./core/rateLimiter');
 const routes = require('./core/routes');
-const languageMiddleware = require('./middlewares/language.middleware');
+const whitelistedDomainList = require('./core/whitelistedDomainList');
 const errorMiddleware = require('./middlewares/error.middleware');
+const languageMiddleware = require('./middlewares/language.middleware');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

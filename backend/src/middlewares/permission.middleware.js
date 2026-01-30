@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
-const UserPermission = require('../modules/user/models/userPermission.model');
-const Permission = require('../modules/permission/models/permission.model');
 const { sendError } = require('../common/responses/response.helper');
+const Permission = require('../modules/permission/models/permission.model');
+const UserPermission = require('../modules/user/models/userPermission.model');
 
 const checkPermission = (requiredPermission) => {
   return async (req, res, next) => {

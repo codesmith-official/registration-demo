@@ -1,8 +1,8 @@
 const { Op } = require('sequelize');
-const Standard = require('../models/standard.model');
-const StandardSubject = require('../models/standardSubject.model');
 const Subject = require('../../subject/models/subject.model');
 const UserStandard = require('../../user/models/userStandard.model');
+const Standard = require('../models/standard.model');
+const StandardSubject = require('../models/standardSubject.model');
 
 const createOrUpdate = async (payload) => {
   let standard;

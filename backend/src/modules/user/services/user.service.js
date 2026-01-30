@@ -1,11 +1,11 @@
 const bcrypt = require('bcrypt');
+const { StatusCodes } = require('http-status-codes');
+const { Op } = require('sequelize');
 const sequelize = require('../../../config/sequelize');
-const User = require('../models/user.model');
 const { Permission, UserType } = require('../../../models');
+const User = require('../models/user.model');
 const UserPermission = require('../models/userPermission.model');
 const UserStandard = require('../models/userStandard.model');
-const { Op } = require('sequelize');
-const { StatusCodes } = require('http-status-codes');
 
 const SALT_ROUNDS = 10;
 

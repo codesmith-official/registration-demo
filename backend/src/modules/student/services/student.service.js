@@ -1,14 +1,14 @@
-const ExcelJS = require('exceljs');
 const path = require('path');
-const sequelize = require('../../../config/sequelize');
+const ExcelJS = require('exceljs');
 const { Op } = require('sequelize');
-const Student = require('../models/student.model');
+const sequelize = require('../../../config/sequelize');
+const { checkAndCreateDirectory } = require('../../../utils/filesystem');
+const Permission = require('../../permission/models/permission.model');
 const Standard = require('../../standard/models/standard.model');
 const User = require('../../user/models/user.model');
-const UserType = require('../../userType/models/userType.model');
-const Permission = require('../../permission/models/permission.model');
 const userService = require('../../user/services/user.service');
-const { checkAndCreateDirectory } = require('../../../utils/filesystem');
+const UserType = require('../../userType/models/userType.model');
+const Student = require('../models/student.model');
 
 const createOrUpdate = async (payload, loggedInUser) => {
   const transaction = await sequelize.transaction();

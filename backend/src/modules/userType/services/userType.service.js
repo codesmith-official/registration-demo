@@ -1,8 +1,8 @@
+const { Op } = require('sequelize');
 const sequelize = require('../../../config/sequelize');
-const UserType = require('../models/userType.model');
 const Permission = require('../../permission/models/permission.model');
 const UserTypePermission = require('../../permission/models/userTypePermission.model');
-const { Op } = require('sequelize');
+const UserType = require('../models/userType.model');
 
 const createOrUpdate = async (payload) => {
   const { id, permissions = [], ...userTypeData } = payload;

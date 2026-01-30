@@ -1,5 +1,5 @@
-const service = require('../services/marksheet.service');
 const { sendResponse } = require('../../../common/responses/response.helper');
+const service = require('../services/marksheet.service');
 
 const createOrUpdate = async (req, res, next) => {
   try {

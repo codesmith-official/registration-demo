@@ -1,8 +1,8 @@
-const service = require('../services/permission.service');
 const {
   sendResponse,
   sendError,
 } = require('../../../common/responses/response.helper');
+const service = require('../services/permission.service');
 
 const list = async (req, res, next) => {
   try {

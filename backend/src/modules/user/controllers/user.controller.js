@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
-const userService = require('../services/user.service');
-const jwtConfig = require('../../../config/jwt');
+const jwt = require('jsonwebtoken');
 const {
   sendResponse,
   sendError,
 } = require('../../../common/responses/response.helper');
+const jwtConfig = require('../../../config/jwt');
+const userService = require('../services/user.service');
 
 const login = async (req, res, next) => {
   try {

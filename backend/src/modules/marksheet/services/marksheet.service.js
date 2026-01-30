@@ -1,5 +1,5 @@
-const Marksheet = require('../models/marksheet.model');
 const Subject = require('../../subject/models/subject.model');
+const Marksheet = require('../models/marksheet.model');
 
 const createOrUpdate = async ({ student_id, standard_id, marks }) => {
   await Marksheet.destroy({

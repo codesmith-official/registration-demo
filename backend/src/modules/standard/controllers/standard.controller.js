@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
-const standardService = require('../services/standard.service');
 const {
   sendResponse,
   sendError,
 } = require('../../../common/responses/response.helper');
+const standardService = require('../services/standard.service');
 
 const createOrUpdate = async (req, res, next) => {
   try {

@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const controller = require('../controllers/marksheet.controller');
-const validator = require('../../../middlewares/validator.middleware');
-const validation = require('../validations/marksheet.validation');
 const authMiddleware = require('../../../middlewares/auth.middleware');
 const {
   checkPermissionDynamic,
   checkPermission,
 } = require('../../../middlewares/permission.middleware');
+const validator = require('../../../middlewares/validator.middleware');
+const controller = require('../controllers/marksheet.controller');
+const validation = require('../validations/marksheet.validation');
 
 router.use(authMiddleware);
 router.post(

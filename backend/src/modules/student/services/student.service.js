@@ -6,6 +6,8 @@ const { checkAndCreateDirectory } = require('../../../utils/filesystem');
 const Permission = require('../../permission/models/permission.model');
 const Standard = require('../../standard/models/standard.model');
 const User = require('../../user/models/user.model');
+const UserPermission = require('../../user/models/userPermission.model');
+const UserStandard = require('../../user/models/userStandard.model');
 const userService = require('../../user/services/user.service');
 const UserType = require('../../userType/models/userType.model');
 const Student = require('../models/student.model');
@@ -24,7 +26,7 @@ const createOrUpdate = async (payload, loggedInUser) => {
       if (student.user_id) {
         const userUpdateData = {};
 
-        if (payload.name)
+        if (payload.first_name || payload.last_name)
           userUpdateData.name = `${payload.first_name} ${payload.last_name}`;
         if (payload.email) userUpdateData.email = payload.email;
 
@@ -82,8 +84,12 @@ const createOrUpdate = async (payload, loggedInUser) => {
   }
 };
 
-const getAll = async () => {
-  return await Student.findAll({
+const getAll = async ({ page, limit }) => {
+  const offset = (page - 1) * limit;
+
+  const { rows, count } = await Student.findAndCountAll({
+    limit,
+    offset,
     order: [['id', 'DESC']],
     include: [
       {
@@ -92,7 +98,21 @@ const getAll = async () => {
         attributes: ['id', 'standard'],
       },
     ],
+    distinct: true,
+    subQuery: false,
   });
+
+  const total = Number.isInteger(count) ? count : 0;
+
+  return {
+    data: rows,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: total ? Math.ceil(total / limit) : 0,
+    },
+  };
 };
 
 const getById = async (id) => {
@@ -108,11 +128,38 @@ const getById = async (id) => {
 };
 
 const remove = async (id) => {
-  const student = await Student.findByPk(id);
-  if (!student) return null;
+  const transaction = await sequelize.transaction();
 
-  await student.destroy();
-  return true;
+  try {
+    const student = await Student.findByPk(id, { transaction });
+    if (!student) {
+      await transaction.rollback();
+      return null;
+    }
+
+    await User.destroy({
+      where: { id: student.user_id },
+      transaction,
+    });
+
+    await UserPermission.destroy({
+      where: { userId: student.user_id },
+      transaction,
+    });
+
+    await UserStandard.destroy({
+      where: { userId: student.user_id },
+      transaction,
+    });
+
+    await student.destroy({ transaction });
+
+    await transaction.commit();
+    return true;
+  } catch {
+    await transaction.rollback();
+    return null;
+  }
 };
 
 const exportStudents = async () => {

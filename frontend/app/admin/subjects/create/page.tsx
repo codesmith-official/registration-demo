@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { createOrUpdateStandard } from '@/lib/api/standard/createOrUpdateStandard';
-import { fetchAllSubjects, Subject } from '@/lib/api/subject/subjects';
+import { createOrUpdateSubject } from '@/lib/api/subject/createOrUpdateSubject';
 import { hasPermission } from '@/lib/permissions';
 import AccessDenied from '@/src/components/AccessDenied';
-import StandardForm from '@/src/components/StandardForm';
+import SubjectForm from '@/src/components/SubjectForm';
 import { usePageHeader } from '@/src/context/PageHeaderContext';
 import { useAppSelector } from '@/src/store/hooks';
 
@@ -18,44 +17,36 @@ export default function CreateStandardPage() {
 
   useEffect(() => {
     setHeader({
-      title: 'Create Standard',
-      description: 'Add a new standard to the system',
+      title: 'Create Subjects',
+      description: 'Add a new subject to the system',
     });
   }, [setHeader]);
 
   const canCreate = me
-    ? hasPermission(me.user_type_id, me.permissions, 'standard.create')
+    ? hasPermission(me.user_type_id, me.permissions, 'subject.create')
     : false;
-
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-
-  useEffect(() => {
-    fetchAllSubjects().then(setSubjects);
-  }, []);
 
   if (!canCreate) {
     return (
       <AccessDenied
-        title="You can't create standards"
-        description="You don't have permission to create standards."
+        title="You can't create subjects"
+        description="You don't have permission to create subjects."
       />
     );
   }
 
   return (
     <div className='max-w-3xl space-y-6'>
-      <StandardForm
+      <SubjectForm
         initialValues={{
-          standard: '',
-          subject_ids: [],
+          subject: '',
         }}
-        subjects={subjects}
-        submitLabel='Create Standard'
+        submitLabel='Create Subject'
         onSubmit={async (values) => {
           try {
-            const res = await createOrUpdateStandard(values);
+            const res = await createOrUpdateSubject(values);
             toast.success(res.message);
-            router.push('/admin/standards');
+            router.push('/admin/subjects');
           } catch (err: any) {
             toast.error(err?.response?.data?.message || 'Error');
           }

@@ -28,7 +28,7 @@ const createOrUpdate = async (req, res, next) => {
 const list = async (req, res, next) => {
   try {
     const page = +req.query?.page || 1;
-    const limit = +req.query?.limit || 10;
+    const limit = req.query?.limit || 10;
     const data = await standardService.getAll(req.user, { page, limit });
     return sendResponse(res, req.lang, 'COMMON.SUCCESS', data);
   } catch (err) {

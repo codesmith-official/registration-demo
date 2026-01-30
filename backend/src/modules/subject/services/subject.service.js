@@ -1,3 +1,5 @@
+const sequelize = require('../../../config/sequelize');
+const StandardSubject = require('../../standard/models/standardSubject.model');
 const Subject = require('../models/subject.model');
 
 const createOrUpdate = async (payload) => {
@@ -51,11 +53,26 @@ const getById = async (id) => {
 };
 
 const remove = async (id) => {
-  const subject = await Subject.findByPk(id);
-  if (!subject) return null;
+  const transaction = await sequelize.transaction();
+  try {
+    const subject = await Subject.findByPk(id, { transaction });
+    if (!subject) {
+      await transaction.rollback();
+      return null;
+    }
+    await subject.destroy({ transaction });
 
-  await subject.destroy();
-  return true;
+    await StandardSubject.destroy({
+      where: { subject_id: id },
+      transaction,
+    });
+
+    await transaction.commit();
+    return true;
+  } catch {
+    await transaction.rollback();
+    return null;
+  }
 };
 
 module.exports = {

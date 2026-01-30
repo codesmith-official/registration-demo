@@ -77,7 +77,7 @@ export default function UserForm({
                 <ErrorMessage
                   name='password'
                   component='p'
-                  className='text-xs text-red-500'
+                  className='text-sm text-red-600 mt-1'
                 />
               </div>
             )}

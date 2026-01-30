@@ -55,7 +55,6 @@ const createOrUpdate = async (payload) => {
 };
 
 const getAll = async (userData, { page, limit }) => {
-  const offset = (page - 1) * limit;
   let filter = {};
 
   // teacher: show only assigned standards
@@ -83,9 +82,24 @@ const getAll = async (userData, { page, limit }) => {
       },
     };
   }
+
+  if (limit === 'all') {
+    const rows = await Standard.findAll({
+      where: filter,
+      order: [['id', 'ASC']],
+    });
+
+    return {
+      data: rows,
+      pagination: null,
+    };
+  }
+
+  const parsedLimit = +limit || 10;
+  const offset = (page - 1) * parsedLimit;
   const { rows, count } = await Standard.findAndCountAll({
     where: filter,
-    limit,
+    limit: parsedLimit,
     offset,
     order: [['id', 'ASC']],
   });
@@ -129,12 +143,19 @@ const remove = async (id) => {
       transaction,
     });
 
+    await StandardSubject.destroy({
+      where: { standard_id: id },
+      transaction,
+    });
+
     await standard.destroy({ transaction });
-  } catch {
+
+    await transaction.commit();
+    return true;
+  } catch (error) {
     await transaction.rollback();
     return null;
   }
-  return true;
 };
 
 module.exports = {

@@ -20,6 +20,14 @@ export interface StandardsApiResponse {
   pagination: Pagination;
 }
 
+export async function fetchAllStandards(): Promise<Standard[]> {
+  const res = await api.get('standards', {
+    params: { limit: 'all' },
+  });
+
+  return res.data.data.data;
+}
+
 export async function fetchStandards(
   page = 1,
   limit = 10,

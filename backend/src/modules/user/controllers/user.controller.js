@@ -5,6 +5,7 @@ const {
   sendError,
 } = require('../../../common/responses/response.helper');
 const jwtConfig = require('../../../config/jwt');
+const studentService = require('../../student/services/student.service');
 const userService = require('../services/user.service');
 
 const login = async (req, res, next) => {
@@ -74,6 +75,11 @@ const getUser = async (req, res, next) => {
         'COMMON.NOT_FOUND',
         StatusCodes.NOT_FOUND,
       );
+    }
+
+    if (user.user_type_id === 5) {
+      const student = await studentService.getByUserId(user.id);
+      user.dataValues.student_id = student.id;
     }
 
     return sendResponse(res, req.lang, 'COMMON.SUCCESS', user);

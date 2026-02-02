@@ -137,6 +137,10 @@ const getById = async (id) => {
   });
 };
 
+const getByUserId = async (id) => {
+  return await Student.findOne({ where: { user_id: id } });
+};
+
 const remove = async (id) => {
   const transaction = await sequelize.transaction();
 
@@ -298,6 +302,7 @@ module.exports = {
   getAll,
   getByStandard,
   getById,
+  getByUserId,
   remove,
   exportStudents,
   importStudents,

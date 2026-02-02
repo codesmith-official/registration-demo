@@ -24,6 +24,7 @@ export interface MeState {
       name: string;
     };
     permissions: Permission[];
+    student_id?: number;
   } | null;
   loading: boolean;
 }

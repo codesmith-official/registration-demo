@@ -87,6 +87,25 @@ export default function Sidebar() {
               </Link>
             );
           })}
+          {me.user_type_id === 5 &&
+            hasPermission(
+              me.user_type_id,
+              me.permissions,
+              'marksheet.view',
+            ) && (
+              <Link
+                key='Reports'
+                href='/admin/reports/view'
+                className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition
+              ${
+                pathname === '/admin/reports/view'
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+              >
+                View Report
+              </Link>
+            )}
         </div>
       </nav>
     </aside>

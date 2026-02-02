@@ -13,8 +13,12 @@ import { useAppSelector } from '@/src/store/hooks';
 export default function ViewReportPage() {
   const { setHeader } = usePageHeader();
 
-  const { id } = useParams<{ id: string }>();
+  let { id } = useParams<{ id: string }>();
   const me = useAppSelector((state) => state.me.data);
+
+  if (id === 'view') {
+    id = me?.student_id?.toString() || '';
+  }
 
   const canView = me
     ? hasPermission(me.user_type_id, me.permissions, 'marksheet.view')

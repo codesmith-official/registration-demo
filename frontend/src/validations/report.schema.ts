@@ -13,12 +13,11 @@ export const reportSchema = () =>
     marks: Yup.array()
       .of(
         Yup.object({
-          subject_id: Yup.number()
-            .required('Subject ID is required')
-            .moreThan(0, 'Invalid Subject'),
+          subject_id: Yup.number().required(),
           marks: Yup.number()
+            .transform((value) => (isNaN(value) ? undefined : value))
             .required('Marks are required')
-            .min(0, 'Marks cannot be negative')
+            .min(0, 'Marks must be at least 0')
             .max(100, 'Marks cannot exceed 100'),
         }),
       )

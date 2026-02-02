@@ -61,11 +61,11 @@ export default function ReportsPage() {
 
   const columns = useMemo(() => {
     const handleView = (report: Report) => {
-      router.push(`/admin/reports/${report.id}`);
+      router.push(`/admin/reports/${report.student_id}`);
     };
 
     const handleEdit = (report: Report) => {
-      router.push(`/admin/reports/${report.id}/edit`);
+      router.push(`/admin/reports/${report.student_id}/edit`);
     };
 
     const cols: any[] = [

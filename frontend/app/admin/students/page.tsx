@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import DataTable from 'react-data-table-component';
 import toast from 'react-hot-toast';
 import { deleteStudent } from '@/lib/api/student/deleteStudent';
+import { exportStudent } from '@/lib/api/student/exportStudent';
 import { fetchStudents, Student, Pagination } from '@/lib/api/student/students';
 import { hasPermission } from '@/lib/permissions';
 import { DeleteConfirmationModal } from '@/src/components/DeleteConfirmationModal';
@@ -63,7 +64,35 @@ export default function StudentsPage() {
     ? hasPermission(me.user_type_id, me.permissions, 'student.delete')
     : false;
 
+  /* const canImport = me
+    ? hasPermission(me.user_type_id, me.permissions, 'student.import')
+    : false; */
+
+  const canExport = me
+    ? hasPermission(me.user_type_id, me.permissions, 'student.export')
+    : false;
+
   const showActionColumn = canView || canEdit || canDelete;
+
+  const handleExport = async () => {
+    try {
+      toast.loading('Generating export...', { id: 'export-toast' });
+      const blob = await exportStudent();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `students_export_${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success('Export started successfully', { id: 'export-toast' });
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Export failed', { id: 'export-toast' });
+    }
+  };
 
   const columns = useMemo(() => {
     const handleView = (student: Student) => {
@@ -169,6 +198,16 @@ export default function StudentsPage() {
   return (
     <div className='space-y-4'>
       <div className='flex flex-row-reverse'>
+        {canExport && (
+          <Link className='ml-5' href=''>
+            <button
+              className='px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700'
+              onClick={handleExport}
+            >
+              Export Students
+            </button>
+          </Link>
+        )}
         {canCreate && (
           <Link href={'/admin/students/create'}>
             <button className='px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700'>

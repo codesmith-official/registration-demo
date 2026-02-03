@@ -216,7 +216,7 @@ const exportStudents = async () => {
   });
 
   const exportDir = checkAndCreateDirectory(
-    path.join(__dirname, '../../../public/assets'),
+    path.join(process.cwd(), 'public/assets'),
   );
   const fileName = `students_${Date.now()}.xlsx`;
   const filePath = path.join(exportDir, fileName);
@@ -225,7 +225,7 @@ const exportStudents = async () => {
 
   return {
     fileName,
-    filePath: `/assets/${fileName}`,
+    filePath,
   };
 };
 

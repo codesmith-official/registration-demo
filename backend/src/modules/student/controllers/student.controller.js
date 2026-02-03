@@ -83,10 +83,13 @@ const remove = async (req, res, next) => {
 
 const exportStudents = async (req, res, next) => {
   try {
-    const file = await service.exportStudents();
-
-    return sendResponse(res, req.lang, 'STUDENT.FILE_GENERATED', {
-      download_url: file.filePath,
+    const { fileName, filePath } = await service.exportStudents();
+    return res.download(filePath, fileName, (err) => {
+      if (err) {
+        if (!res.headersSent) {
+          next(err);
+        }
+      }
     });
   } catch (e) {
     next(e);
